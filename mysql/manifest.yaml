@@ -72,11 +72,11 @@ spec:
           mountPath: /var/lib/mysql
       volumeClaimTemplates:
       - metadata:
-          name: mysql-persistent-storage
-          namespace: expense-namespace
+          name: mysql
         spec:
           accessModes: ["ReadWriteOnce"]
+          storageClassName: ebs-sc
           resources:
             requests:
               storage: 1Gi
-          storageClassName: ebs-sc
+          
