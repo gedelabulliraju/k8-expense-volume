@@ -40,8 +40,8 @@ spec:
     port: 3306
     targetPort: 3306
 ---
-kind: StatefulSet
 apiVersion: apps/v1
+kind: StatefulSet
 metadata:
   name: mysql
   namespace: expense-namespace
