@@ -1,0 +1,47 @@
+kind: Deployment # Deployment for MySQL
+apiVersion: apps/v1 # Deployment API version
+metadata: # Deployment metadata
+  name: frontend # Backend deployment name
+  namespace: expense # Namespace for the deployment
+  labels: # Labels for the deployment
+    project: expense # MySQL project label
+    tier: web # API tier label
+    app: frontend # Backend application label
+spec: # Deployment specification
+  replicas: 2 # Number of MySQL replicas
+  selector: # Selector to match the MySQL pods
+    matchLabels: # Labels to match MySQL pods
+      project: expense # MySQL project label
+      tier: web # API tier label
+      app: frontend # Backend application label
+  template: # Template for the MySQL pod
+    metadata: # Pod metadata
+      labels: # Labels for the pod
+        project: expense # MySQL project label
+        tier: web # API tier label
+        app: frontend # Backend application label
+    spec: # Pod specification
+      containers: # list ofcontainers in the pod
+      - name: frontend # Name of the Backend container
+        image: joindevops/frontend:v1 # Backend container image
+---
+kind: Service # Service for backend
+apiVersion: v1 # Service API version
+metadata: # Service metadata
+  name: frontend # MySQL service name
+  namespace: expense # Namespace for the service
+  labels: # Labels for the service
+    project: expense # MySQL project label
+    tier: web # API tier label
+    app: frontend # Backend application label
+spec: # Service specification
+  type: LoadBalancer # Service type
+  selector: # Selector to match the backend pods
+    project: expense # MySQL project label
+    tier: web # API tier label
+    app: frontend # Backend application label
+  ports: # Ports for the service
+  - name: frontend # Name of the backend service port
+    protocol: TCP # Protocol for the service
+    port: 80 # Port for the backend service
+    targetPort: 80 # Target port for the backend service
