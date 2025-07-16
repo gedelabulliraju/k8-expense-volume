@@ -5,13 +5,13 @@ metadata:
   namespace: expense-namespace
   labels:
     purpose: expense
-    tair: db
+    tier: db
     app: mysql
 spec:
   clusterIP: None
   selector:
     purpose: expense
-    tair: db
+    tier: db
     app: mysql
   ports:
   - name: mysql-ports
@@ -26,13 +26,13 @@ metadata:
   namespace: expense-namespace
   labels:
     purpose: expense
-    tair: db
+    tier: db
     app: mysql
 spec:
   type: ClusterIP
   selector:
     purpose: expense
-    tair: db
+    tier: db
     app: mysql
   ports:
   - name: mysql-ports
@@ -47,13 +47,13 @@ metadata:
   namespace: expense-namespace
   labels:
     purpose: expense
-    tair: db
+    tier: db
     app: mysql
 spec:
   selector:
     matchLabels:
       purpose: expense
-      tair: db
+      tier: db
       app: mysql
   serviceName: mysql-headless
   replicas: 2
@@ -61,14 +61,14 @@ spec:
     metadata:
       labels:
         purpose: expense
-        tair: db
+        tier: db
         app: mysql
     spec:
       containers:
       - name: mysql
         image: joindevops/mysql:v1
         volumeMounts:
-        - name: mysql-persistent-storage
+        - name: mysql
           mountPath: /var/lib/mysql
       volumeClaimTemplates:
       - metadata:
