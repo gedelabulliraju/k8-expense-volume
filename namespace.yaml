@@ -4,5 +4,4 @@ metadata:
   name: expense-namespace
   labels:
     purpose: expense
-    tair: db
-    app: mysql
+    environment: dev
