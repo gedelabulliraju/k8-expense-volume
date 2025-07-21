@@ -2,7 +2,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: mysql-headless
-  namespace: expense-namespace
+  namespace: expense
   labels:
     purpose: expense
     tier: db
@@ -23,7 +23,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: mysql
-  namespace: expense-namespace
+  namespace: expense
   labels:
     purpose: expense
     tier: db
@@ -44,7 +44,7 @@ apiVersion: apps/v1
 kind: StatefulSet
 metadata:
   name: mysql
-  namespace: expense-namespace
+  namespace: expense
   labels:
     purpose: expense
     tier: db
