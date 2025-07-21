@@ -29,7 +29,7 @@ metadata:
     tier: db
     app: mysql
 spec:
-  type: ClusterIP
+  # type: ClusterIP
   selector:
     purpose: expense
     tier: db
