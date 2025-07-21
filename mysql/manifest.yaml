@@ -1,27 +1,6 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: mysql-headless
-  namespace: expense
-  labels:
-    purpose: expense
-    tier: db
-    app: mysql
-spec:
-  clusterIP: None
-  selector:
-    purpose: expense
-    tier: db
-    app: mysql
-  ports:
-  - name: mysql-ports
-    protocol: TCP
-    port: 3306
-    targetPort: 3306
----
-kind: Service
-apiVersion: v1
-metadata:
   name: mysql
   namespace: expense
   labels:
@@ -29,7 +8,7 @@ metadata:
     tier: db
     app: mysql
 spec:
-  # type: ClusterIP
+  type: ClusterIP
   selector:
     purpose: expense
     tier: db
@@ -72,11 +51,92 @@ spec:
           mountPath: /var/lib/mysql
   volumeClaimTemplates:
   - metadata:
-     name: mysql
+      name: mysql
     spec:
       accessModes: ["ReadWriteOnce"]
       storageClassName: ebs-sc
       resources:
         requests:
           storage: 1Gi
+# kind: Service
+# apiVersion: v1
+# metadata:
+#   name: mysql-headless
+#   namespace: expense
+#   labels:
+#     purpose: expense
+#     tier: db
+#     app: mysql
+# spec:
+#   clusterIP: None
+#   selector:
+#     purpose: expense
+#     tier: db
+#     app: mysql
+#   ports:
+#   - name: mysql-ports
+#     protocol: TCP
+#     port: 3306
+#     targetPort: 3306
+# ---
+# kind: Service
+# apiVersion: v1
+# metadata:
+#   name: mysql
+#   namespace: expense
+#   labels:
+#     purpose: expense
+#     tier: db
+#     app: mysql
+# spec:
+#   # type: ClusterIP
+#   selector:
+#     purpose: expense
+#     tier: db
+#     app: mysql
+#   ports:
+#   - name: mysql-ports
+#     protocol: TCP
+#     port: 3306
+#     targetPort: 3306
+# ---
+# apiVersion: apps/v1
+# kind: StatefulSet
+# metadata:
+#   name: mysql
+#   namespace: expense
+#   labels:
+#     purpose: expense
+#     tier: db
+#     app: mysql
+# spec:
+#   selector:
+#     matchLabels:
+#       purpose: expense
+#       tier: db
+#       app: mysql
+#   serviceName: mysql-headless
+#   replicas: 2
+#   template:
+#     metadata:
+#       labels:
+#         purpose: expense
+#         tier: db
+#         app: mysql
+#     spec:
+#       containers:
+#       - name: mysql
+#         image: joindevops/mysql:v1
+#         volumeMounts:
+#         - name: mysql
+#           mountPath: /var/lib/mysql
+#   volumeClaimTemplates:
+#   - metadata:
+#      name: mysql
+#     spec:
+#       accessModes: ["ReadWriteOnce"]
+#       storageClassName: ebs-sc
+#       resources:
+#         requests:
+#           storage: 1Gi
           
