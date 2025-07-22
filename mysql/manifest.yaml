@@ -13,6 +13,11 @@ spec:
     purpose: expense
     tier: db
     app: mysql
+  ports:
+  - name: mysql-ports
+    protocol: TCP
+    port: 3306
+    targetPort: 3306
 ---
 kind: Service
 apiVersion: v1
