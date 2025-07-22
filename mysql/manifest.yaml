@@ -8,16 +8,27 @@ metadata:
     tier: db
     app: mysql
 spec:
-  type: ClusterIP
+  # type: ClusterIP
   selector:
     purpose: expense
     tier: db
     app: mysql
-  ports:
-  - name: mysql-ports
-    protocol: TCP
-    port: 3306
-    targetPort: 3306
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: mysql-headless
+  namespace: expense
+  labels:
+    purpose: expense
+    tier: db
+    app: mysql
+spec:
+  clusterIP: None
+  selector:
+    purpose: expense
+    tier: db
+    app: mysql
 ---
 apiVersion: apps/v1
 kind: StatefulSet
