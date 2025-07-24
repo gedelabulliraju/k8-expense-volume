@@ -251,7 +251,7 @@ spec:
       name: mysql
     spec:
       accessModes: ["ReadWriteOnce"]
-      storageClassName: ebs-sc
+      storageClassName: "ebs-sc"
       resources:
         requests:
           storage: 1Gi
