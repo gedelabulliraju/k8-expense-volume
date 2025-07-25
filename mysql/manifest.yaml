@@ -10,8 +10,7 @@ spec:
     tier: db
     app: mysql
   ports:
-  - name: mysql-ports
-    protocol: TCP
+  - protocol: TCP
     port: 3306
     targetPort: 3306
 ---
@@ -31,8 +30,7 @@ spec:
     tier: db
     app: mysql
   ports:
-  - name: mysql-ports
-    protocol: TCP
+  - protocol: TCP
     port: 3306
     targetPort: 3306
 ---
@@ -74,4 +72,4 @@ spec:
       storageClassName: "ebs-sc"
       resources:
         requests:
-          storage: 1Gi
+          storage: 2Gi
