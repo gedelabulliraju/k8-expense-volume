@@ -24,13 +24,14 @@ metadata:
     tier: db
     app: mysql
 spec:
-  # clusterIP: None
+  clusterIP: None
   selector:
     purpose: expense
     tier: db
     app: mysql
   ports:
-  - protocol: TCP
+  - name: mysql
+    protocol: TCP
     port: 3306
     targetPort: 3306
 ---
@@ -50,7 +51,7 @@ spec:
       tier: db
       app: mysql
   serviceName: "mysql-headless"
-  replicas: 2
+  replicas: 3
   template:
     metadata:
       labels:
@@ -60,7 +61,7 @@ spec:
     spec:
       containers:
       - name: mysql
-        image: joindevops/mysql:v1
+        image: srlaf/mysql:v1
         volumeMounts:
         - name: mysql
           mountPath: /var/lib/mysql
