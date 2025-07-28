@@ -23,7 +23,7 @@ spec: # Deployment specification
     spec: # Pod specification
       containers: # list ofcontainers in the pod
       - name: frontend # Name of the Backend container
-        image: srlaf/frontend:v1 # Backend container image
+        image: joindevops/frontend:v1 # Backend container image
 ---
 kind: Service # Service for backend
 apiVersion: v1 # Service API version
