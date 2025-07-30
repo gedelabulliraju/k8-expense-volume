@@ -45,26 +45,41 @@ metadata:
     tier: db
     app: mysql
 spec:
-  selector:
-    matchLabels:
-      purpose: expense
-      tier: db
-      app: mysql
-  serviceName: "mysql-headless"
-  replicas: 5
   template:
-    metadata:
-      labels:
-        purpose: expense
-        tier: db
-        app: mysql
     spec:
+      securityContext:
+        fsGroup: 1000
       containers:
       - name: mysql
         image: srlaf/mysql:v1
+        securityContext:
+          runAsUser: 1000
+          runAsGroup: 1000
         volumeMounts:
-        - name: mysql
+        - name: mysql-pv
           mountPath: /var/lib/mysql
+
+# spec:
+#   selector:
+#     matchLabels:
+#       purpose: expense
+#       tier: db
+#       app: mysql
+#   serviceName: "mysql-headless"
+#   replicas: 5
+#   template:
+#     metadata:
+#       labels:
+#         purpose: expense
+#         tier: db
+#         app: mysql
+#     spec:
+#       containers:
+#       - name: mysql
+#         image: srlaf/mysql:v1
+#         volumeMounts:
+#         - name: mysql
+#           mountPath: /var/lib/mysql
   volumeClaimTemplates:
   - metadata:
       name: mysql
