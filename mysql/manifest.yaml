@@ -1,38 +1,32 @@
 kind: Service
 apiVersion: v1
 metadata:
-  name: mysql
+  name: mysql-headless
   namespace: expense
 spec:
-  # type: ClusterIP
+  clusterIP: None # for headless service there is no cluster IP
   selector:
-    purpose: expense
+    project: expense
     tier: db
     app: mysql
   ports:
   - protocol: TCP
-    port: 3306
+    port: 3306 # service port
     targetPort: 3306
 ---
 kind: Service
 apiVersion: v1
 metadata:
-  name: mysql-headless
+  name: mysql
   namespace: expense
-  labels:
-    purpose: expense
-    tier: db
-    app: mysql
 spec:
-  clusterIP: None
   selector:
-    purpose: expense
+    project: expense
     tier: db
     app: mysql
   ports:
-  - name: mysql
-    protocol: TCP
-    port: 3306
+  - protocol: TCP
+    port: 3306 # service port
     targetPort: 3306
 ---
 apiVersion: apps/v1
@@ -40,52 +34,34 @@ kind: StatefulSet
 metadata:
   name: mysql
   namespace: expense
-  labels:
-    purpose: expense
-    tier: db
-    app: mysql
 spec:
+  selector:
+    matchLabels:
+      project: expense
+      tier: db
+      app: mysql
+  serviceName: "mysql-headless" # this is the headless service should be mentioned for statefulset
+  replicas: 2 # 
   template:
+    metadata:
+      labels:
+        project: expense
+        tier: db
+        app: mysql
     spec:
-      securityContext:
-        fsGroup: 1000
       containers:
       - name: mysql
         image: srlaf/mysql:v1
-        securityContext:
-          runAsUser: 1000
-          runAsGroup: 1000
         volumeMounts:
-        - name: mysql-pv
+        - name: mysql
           mountPath: /var/lib/mysql
-
-# spec:
-#   selector:
-#     matchLabels:
-#       purpose: expense
-#       tier: db
-#       app: mysql
-#   serviceName: "mysql-headless"
-#   replicas: 5
-#   template:
-#     metadata:
-#       labels:
-#         purpose: expense
-#         tier: db
-#         app: mysql
-#     spec:
-#       containers:
-#       - name: mysql
-#         image: srlaf/mysql:v1
-#         volumeMounts:
-#         - name: mysql
-#           mountPath: /var/lib/mysql
+  # This is PVC defnition, directly mentioned here
   volumeClaimTemplates:
   - metadata:
       name: mysql
     spec:
       accessModes: [ "ReadWriteOnce" ]
-      storageClassName: "ebs-sc"
+      storageClassName: "ebs-sc" # specify the storage class
       resources:
         requests:
-          storage: 4Gi
+          storage: 1Gi
