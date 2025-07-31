@@ -1,56 +1,3 @@
-# kind: ConfigMap # ConfigMap for MySQL
-# apiVersion: v1 # ConfigMap API version
-# metadata: # ConfigMap metadata
-#   name: backend # MySQL config map name
-#   namespace: expense # Namespace for the config map
-# data: # Data for the ConfigMap
-#   DB_HOST: mysql # MySQL host
-# ---
-# kind: Deployment # Deployment for MySQL
-# apiVersion: apps/v1 # Deployment API version
-# metadata: # Deployment metadata
-#   name: backend # Backend deployment name
-#   namespace: expense # Namespace for the deployment
-#   labels: # Labels for the deployment
-#     project: expense # MySQL project label
-#     tier: api # API tier label
-#     app: backend # Backend application label
-# spec: # Deployment specification
-#   replicas: 2 # Number of MySQL replicas
-#   selector: # Selector to match the MySQL pods
-#     matchLabels: # Labels to match MySQL pods
-#       project: expense # MySQL project label
-#       tier: api # API tier label
-#       app: backend # Backend application label
-#   template: # Template for the MySQL pod
-#     metadata: # Pod metadata
-#       labels: # Labels for the pod
-#         project: expense # MySQL project label
-#         tier: api # API tier label
-#         app: backend # Backend application label
-#     spec: # Pod specification
-#       containers: # list ofcontainers in the pod
-#       - name: backend # Name of the Backend container
-#         image: srlaf/backend:a1 # Backend container image
-#         envFrom: # Environment variables from ConfigMap
-#         - configMapRef: # Reference to the ConfigMap
-#             name: backend # Name of the ConfigMap
-# ---
-# kind: Service # Service for backend
-# apiVersion: v1 # Service API version
-# metadata: # Service metadata
-#   name: backend # MySQL service name
-#   namespace: expense # Namespace for the service
-# spec: # Service specification
-#   selector: # Selector to match the backend pods
-#     project: expense # backend project label
-#     tier: api # API tier label
-#     app: backend # Backend application label
-#   ports: # Ports for the service
-#   - name: backend # Name of the backend service port
-#     protocol: TCP # Protocol for the service
-#     port: 8080 # Port for the backend service
-#     targetPort: 8080 # Target port for the backend service
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -91,9 +38,17 @@ spec:
           image: srlaf/backend:a1
           ports:
             - containerPort: 8080
-          envFrom:
-            - configMapRef:
-                name: backend-config
+          env:
+            - name: DB_HOST
+              value: "mysql"
+            - name: DB_PORT
+              value: "3306"
+            - name: DB_USER
+              value: "expense"
+            - name: DB_PASSWORD
+              value: "ExpenseApp@1"
+            - name: DB_NAME
+              value: "transactions"
 ---
 apiVersion: v1
 kind: Service
