@@ -18,7 +18,7 @@ spec:
         fsGroup: 1000           # 👈 Gives group-level access to volume files
       containers:
       - name: mysql
-        image: srlaf/mysql:v1
+        image: srlaf/mysql:a1
         ports:
         - containerPort: 3306
           name: mysql
