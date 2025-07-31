@@ -31,7 +31,7 @@ spec: # Deployment specification
     spec: # Pod specification
       containers: # list ofcontainers in the pod
       - name: backend # Name of the Backend container
-        image: srlaf/backend:v1 # Backend container image
+        image: srlaf/backend:a1 # Backend container image
         envFrom: # Environment variables from ConfigMap
         - configMapRef: # Reference to the ConfigMap
             name: backend # Name of the ConfigMap
