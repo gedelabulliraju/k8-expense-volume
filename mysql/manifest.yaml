@@ -28,57 +28,6 @@ spec:
   - protocol: TCP
     port: 3306 # service port
     targetPort: 3306
----
-apiVersion: apps/v1
-kind: StatefulSet
-metadata:
-  name: mysql
-  namespace: expense
-spec:
-  serviceName: mysql
-  replicas: 2
-  selector:
-    matchLabels:
-      project: expense
-      tier: db
-      app: mysql
-  template:
-    metadata:
-      labels:
-        project: expense
-        tier: db
-        app: mysql
-    spec:
-      securityContext:
-        fsGroup: 1000           # 👈 Gives group-level access to volume files
-      containers:
-      - name: mysql
-        image: srlaf/mysql:v1
-        ports:
-        - containerPort: 3306
-          name: mysql
-        env:
-        - name: MYSQL_ROOT_PASSWORD
-          value: ExpenseApp@1
-        volumeMounts:
-        - name: mysql-pv
-          mountPath: /var/lib/mysql
-        securityContext:
-          runAsUser: 1000       # 👈 Runs container as user 'expense'
-          runAsGroup: 1000      # 👈 Runs with 'expense' group
-  volumeClaimTemplates:
-  - metadata:
-      name: mysql-pv
-      labels:
-        project: expense
-        tier: db
-        app: mysql
-    spec:
-      accessModes: ["ReadWriteOnce"]
-      storageClassName: ebs-sc
-      resources:
-        requests:
-          storage: 1.5Gi
 # ---
 # apiVersion: apps/v1
 # kind: StatefulSet
@@ -86,13 +35,13 @@ spec:
 #   name: mysql
 #   namespace: expense
 # spec:
+#   serviceName: mysql
+#   replicas: 2
 #   selector:
 #     matchLabels:
 #       project: expense
 #       tier: db
 #       app: mysql
-#   serviceName: "mysql-headless" # this is the headless service should be mentioned for statefulset
-#   replicas: 2 # 
 #   template:
 #     metadata:
 #       labels:
@@ -100,19 +49,70 @@ spec:
 #         tier: db
 #         app: mysql
 #     spec:
+#       securityContext:
+#         fsGroup: 1000           # 👈 Gives group-level access to volume files
 #       containers:
 #       - name: mysql
-#         image: srlaf/mysql:a1
+#         image: srlaf/mysql:v1
+#         ports:
+#         - containerPort: 3306
+#           name: mysql
+#         env:
+#         - name: MYSQL_ROOT_PASSWORD
+#           value: ExpenseApp@1
 #         volumeMounts:
-#         - name: mysql
+#         - name: mysql-pv
 #           mountPath: /var/lib/mysql
-#   # This is PVC defnition, directly mentioned here
+#         securityContext:
+#           runAsUser: 1000       # 👈 Runs container as user 'expense'
+#           runAsGroup: 1000      # 👈 Runs with 'expense' group
 #   volumeClaimTemplates:
 #   - metadata:
-#       name: mysql
+#       name: mysql-pv
+#       labels:
+#         project: expense
+#         tier: db
+#         app: mysql
 #     spec:
-#       accessModes: [ "ReadWriteOnce" ]
-#       storageClassName: "ebs-sc" # specify the storage class
+#       accessModes: ["ReadWriteOnce"]
+#       storageClassName: ebs-sc
 #       resources:
 #         requests:
-#           storage: 1Gi
+#           storage: 1.5Gi
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql
+  namespace: expense
+spec:
+  selector:
+    matchLabels:
+      project: expense
+      tier: db
+      app: mysql
+  serviceName: "mysql-headless" # this is the headless service should be mentioned for statefulset
+  replicas: 2 # 
+  template:
+    metadata:
+      labels:
+        project: expense
+        tier: db
+        app: mysql
+    spec:
+      containers:
+      - name: mysql
+        image: srlaf/mysql:a1
+        volumeMounts:
+        - name: mysql
+          mountPath: /var/lib/mysql
+  # This is PVC defnition, directly mentioned here
+  volumeClaimTemplates:
+  - metadata:
+      name: mysql
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: "ebs-sc" # specify the storage class
+      resources:
+        requests:
+          storage: 1Gi

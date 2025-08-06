@@ -24,8 +24,6 @@ spec: # Deployment specification
       containers: # list ofcontainers in the pod
       - name: frontend # Name of the Backend container
         image: srlaf/frontend:v1 # Backend container image
-        ports: # Ports for the Backend container
-        - containerPort: 80 # Port for the Backend container
 ---
 kind: Service # Service for backend
 apiVersion: v1 # Service API version
@@ -46,3 +44,4 @@ spec: # Service specification
   - name: frontend # Name of the backend service port
     protocol: TCP # Protocol for the service
     port: 80 # Port for the backend service
+    targetPort: 80 # Target port for the backend container
