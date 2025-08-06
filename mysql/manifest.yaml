@@ -69,6 +69,10 @@ spec:
   volumeClaimTemplates:
   - metadata:
       name: mysql-pv
+      labels:
+        project: expense
+        tier: db
+        app: mysql
     spec:
       accessModes: ["ReadWriteOnce"]
       storageClassName: ebs-sc
