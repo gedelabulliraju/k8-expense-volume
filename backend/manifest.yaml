@@ -35,7 +35,7 @@ spec:
     spec:
       containers:
         - name: backend
-          image: srlaf/backend:a1
+          image: srlaf/backend:v1
           ports:
             - containerPort: 8080
           env:
