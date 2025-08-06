@@ -71,6 +71,8 @@ spec:
       containers:
         - name: frontend
           image: srlaf/frontend:v1
+          ports:
+            - containerPort: 1050
 ---
 apiVersion: v1
 kind: Service
@@ -87,3 +89,8 @@ spec:
     project: expense
     tier: web
     app: frontend
+  ports:
+    - name: frontend
+      protocol: TCP
+      port: 80
+      targetPort: 1050 # Target port for the frontend container
