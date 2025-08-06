@@ -39,10 +39,14 @@ spec:
   replicas: 2
   selector:
     matchLabels:
+      project: expense
+      tier: db
       app: mysql
   template:
     metadata:
       labels:
+        project: expense
+        tier: db
         app: mysql
     spec:
       securityContext:
@@ -57,14 +61,14 @@ spec:
         - name: MYSQL_ROOT_PASSWORD
           value: ExpenseApp@1
         volumeMounts:
-        - name: mysql-persistent-storage
+        - name: mysql-pv
           mountPath: /var/lib/mysql
         securityContext:
           runAsUser: 1000       # 👈 Runs container as user 'expense'
           runAsGroup: 1000      # 👈 Runs with 'expense' group
   volumeClaimTemplates:
   - metadata:
-      name: mysql-persistent-storage
+      name: mysql-pv
     spec:
       accessModes: ["ReadWriteOnce"]
       storageClassName: ebs-sc
