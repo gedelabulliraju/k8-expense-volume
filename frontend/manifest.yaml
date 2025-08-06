@@ -46,4 +46,3 @@ spec: # Service specification
   - name: frontend # Name of the backend service port
     protocol: TCP # Protocol for the service
     port: 80 # Port for the backend service
-    targetPort: 80 # Target port for the backend service
