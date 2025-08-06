@@ -100,6 +100,9 @@ spec:
         tier: db
         app: mysql
     spec:
+      securityContext:
+        fsGroup: 1000 # Gives group-level access to volume files
+    spec:
       containers:
       - name: mysql
         image: srlaf/mysql:a1
