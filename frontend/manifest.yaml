@@ -92,5 +92,5 @@ spec:
   ports:
     - name: frontend
       protocol: TCP
-      port: 3000
+      port: 80
       targetPort: 3000 # Target port for the frontend container
