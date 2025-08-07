@@ -70,7 +70,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: srlaf/frontend:a1
+          image: srlaf/frontend:1080
           ports:
             - containerPort: 1080
 ---
