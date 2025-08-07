@@ -82,11 +82,15 @@ spec:
         volumeMounts:
         - name: mysql-pv
           mountPath: /var/lib/mysql
-        - name: mysql-config
+        - name: mysql-config-volume
           mountPath: /etc/mysql/conf.d
         securityContext:
           runAsUser: 1000
           runAsGroup: 1000
+      volumes:
+      - name: mysql-config-volume
+        configMap:
+          name: mysql-config
   volumeClaimTemplates:
   - metadata:
       name: mysql-pv
@@ -100,7 +104,3 @@ spec:
       resources:
         requests:
           storage: 1.5Gi
-  volumeMounts:
-  - name: mysql-config
-    configMap:
-      name: mysql-config
