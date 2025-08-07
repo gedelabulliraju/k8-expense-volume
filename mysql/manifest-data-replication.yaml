@@ -1,0 +1,106 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mysql-config
+  namespace: expense
+data:
+  master.cnf: |
+    [mysqld]
+    server-id=1
+    log-bin=mysql-bin
+    binlog_do_db=transactions
+  slave.cnf: |
+    [mysqld]
+    server-id=2
+    relay-log=relay-log
+    log-bin=mysql-bin
+    read_only=1
+    replicate-do-db=transactions
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql-headless
+  namespace: expense
+spec:
+  clusterIP: None
+  selector:
+    project: expense
+    tier: db
+    app: mysql
+  ports:
+  - protocol: TCP
+    port: 3306
+    targetPort: 3306
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  namespace: expense
+spec:
+  selector:
+    project: expense
+    tier: db
+    app: mysql
+  ports:
+  - protocol: TCP
+    port: 3306
+    targetPort: 3306
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql
+  namespace: expense
+spec:
+  serviceName: mysql
+  replicas: 2
+  selector:
+    matchLabels:
+      project: expense
+      tier: db
+      app: mysql
+  template:
+    metadata:
+      labels:
+        project: expense
+        tier: db
+        app: mysql
+    spec:
+      securityContext:
+        fsGroup: 1000
+      containers:
+      - name: mysql
+        image: srlaf/mysql:v1
+        ports:
+        - containerPort: 3306
+          name: mysql
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: ExpenseApp@1
+        volumeMounts:
+        - name: mysql-pv
+          mountPath: /var/lib/mysql
+        - name: mysql-config
+          mountPath: /etc/mysql/conf.d
+        securityContext:
+          runAsUser: 1000
+          runAsGroup: 1000
+  volumeClaimTemplates:
+  - metadata:
+      name: mysql-pv
+      labels:
+        project: expense
+        tier: db
+        app: mysql
+    spec:
+      accessModes: ["ReadWriteOnce"]
+      storageClassName: ebs-sc
+      resources:
+        requests:
+          storage: 1.5Gi
+  volumeMounts:
+  - name: mysql-config
+    configMap:
+      name: mysql-config
