@@ -55,7 +55,7 @@ metadata:
     tier: web
     app: frontend
 spec:
-  replicas: 2
+  replicas: 4
   selector:
     matchLabels:
       project: expense
@@ -70,9 +70,9 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: srlaf/frontend:v1
+          image: srlaf/frontend:a1
           ports:
-            - containerPort: 80
+            - containerPort: 3000
 ---
 apiVersion: v1
 kind: Service
@@ -92,5 +92,5 @@ spec:
   ports:
     - name: frontend
       protocol: TCP
-      port: 80
-      targetPort: 80 # Target port for the frontend container
+      port: 3000
+      targetPort: 3000 # Target port for the frontend container
