@@ -20,7 +20,7 @@ metadata:
     tier: api
     app: backend
 spec:
-  replicas: 2
+  replicas: 6
   selector:
     matchLabels:
       project: expense
