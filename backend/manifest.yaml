@@ -107,7 +107,7 @@ spec:
             - containerPort: 8080
           env:
             - name: DB_HOST
-              value: "mysql-0.mysql-headless"   # ✅ ఇక్కడ కూడా మార్చాం
+              value: "mysql"   # ✅ ఇక్కడ కూడా మార్చాం
             - name: DB_PORT
               value: "3306"
             - name: DB_USER
