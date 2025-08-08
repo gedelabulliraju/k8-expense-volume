@@ -1,10 +1,77 @@
+# apiVersion: v1
+# kind: ConfigMap
+# metadata:
+#   name: backend
+#   namespace: expense
+# data:
+#   DB_HOST: mysql
+#   DB_PORT: "3306"
+#   DB_USER: expense
+#   DB_PASSWORD: ExpenseApp@1
+#   DB_NAME: transactions
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: backend
+#   namespace: expense
+#   labels:
+#     project: expense
+#     tier: api
+#     app: backend
+# spec:
+#   replicas: 6
+#   selector:
+#     matchLabels:
+#       project: expense
+#       tier: api
+#       app: backend
+#   template:
+#     metadata:
+#       labels:
+#         project: expense
+#         tier: api
+#         app: backend
+#     spec:
+#       containers:
+#         - name: backend
+#           image: srlaf/backend:v1
+#           ports:
+#             - containerPort: 8080
+#           env:
+#             - name: DB_HOST
+#               value: "mysql"
+#             - name: DB_PORT
+#               value: "3306"
+#             - name: DB_USER
+#               value: "expense"
+#             - name: DB_PASSWORD
+#               value: "ExpenseApp@1"
+#             - name: DB_NAME
+#               value: "transactions"
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: backend
+#   namespace: expense
+# spec:
+#   selector:
+#     project: expense
+#     tier: api
+#     app: backend
+#   ports:
+#     - name: http
+#       protocol: TCP
+#       port: 8080
+#       targetPort: 8080
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: backend
   namespace: expense
 data:
-  DB_HOST: mysql
+  DB_HOST: mysql-0.mysql-headless   # ✅ primary MySQL కి మాత్రమే కనెక్ట్ అవుతుంది
   DB_PORT: "3306"
   DB_USER: expense
   DB_PASSWORD: ExpenseApp@1
@@ -40,7 +107,7 @@ spec:
             - containerPort: 8080
           env:
             - name: DB_HOST
-              value: "mysql"
+              value: "mysql-0.mysql-headless"   # ✅ ఇక్కడ కూడా మార్చాం
             - name: DB_PORT
               value: "3306"
             - name: DB_USER
