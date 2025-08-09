@@ -73,6 +73,13 @@ spec:
           image: srlaf/frontend:1080
           ports:
             - containerPort: 1080
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "128Mi"
+              cpu: "100m"
 ---
 apiVersion: v1
 kind: Service
