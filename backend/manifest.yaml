@@ -139,3 +139,17 @@ spec:
       protocol: TCP
       port: 8080
       targetPort: 8080
+---
+kind: HorizontalPodAutoscaler
+apiVersion: autoscaling/v2
+metadata:
+  name: backend-hpa
+  namespace: expense
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: backend
+  minReplicas: 2
+  maxReplicas: 20
+  targetCPUUtilizationPercentage: 15
