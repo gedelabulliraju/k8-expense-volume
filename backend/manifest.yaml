@@ -141,7 +141,7 @@ spec:
       targetPort: 8080
 ---
 kind: HorizontalPodAutoscaler
-apiVersion: autoscaling/v2
+apiVersion: autoscaling/v1
 metadata:
   name: backend-hpa
   namespace: expense

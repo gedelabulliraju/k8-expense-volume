@@ -103,7 +103,7 @@ spec:
       targetPort: 1080 # Target port for the frontend container
 ---
 kind: HorizontalPodAutoscaler
-apiVersion: autoscaling/v2
+apiVersion: autoscaling/v1
 metadata:
   name: frontend-hpa
   namespace: expense
